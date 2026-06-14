@@ -1,0 +1,97 @@
+# Claude Code / GitHub Copilot Tools Configuration
+# This file configures custom tools for use in Copilot Chat
+
+version: "1.0"
+
+tools:
+  - id: deepseek_image_recognition
+    name: "DeepSeek 图片识别"
+    description: "使用 DeepSeek Vision 识别和分析图片内容"
+    
+    # 工具入口点
+    entry_point:
+      type: python
+      module: src.deepseek_vision
+      class: DeepSeekVisionTool
+      method: recognize_image
+    
+    # 参数定义
+    parameters:
+      - name: image_input
+        type: string
+        description: "图片URL或本地文件路径"
+        required: true
+      
+      - name: prompt
+        type: string
+        description: "识别提示词"
+        required: false
+        default: "请详细描述这张图片的内容"
+    
+    # 环境要求
+    environment:
+      - DEEPSEEK_API_KEY
+      - DEEPSEEK_API_URL
+    
+    # 功能标签
+    tags:
+      - image-recognition
+      - vision
+      - ai-analysis
+    
+    # 使用示例
+    examples:
+      - |
+        # 识别网络图片
+        @deepseek-vision 识别这张图片: https://example.com/photo.jpg
+      
+      - |
+        # 识别本地图片
+        @deepseek-vision 分析 ./screenshot.png
+      
+      - |
+        # 自定义提示词
+        @deepseek-vision 从这个UI设计图生成代码: design.png
+
+  - id: deepseek_claude_vision
+    name: "DeepSeek Claude Vision Chat"
+    description: "通过 Claude 与 DeepSeek Vision 进行对话，支持图片识别"
+    
+    # 工具入口点
+    entry_point:
+      type: python
+      module: src.claude_adapter
+      class: DeepSeekImageRecognitionAdapter
+      method: chat_with_vision
+    
+    # 参数定义
+    parameters:
+      - name: user_message
+        type: string
+        description: "用户消息"
+        required: true
+    
+    # 环境要求
+    environment:
+      - DEEPSEEK_API_KEY
+      - ANTHROPIC_API_KEY
+    
+    # 功能标签
+    tags:
+      - claude
+      - image-recognition
+      - ai-chat
+    
+    # 使用示例
+    examples:
+      - |
+        # 通过 Claude 识别图片
+        @deepseek-claude-vision 请帮我分析这张图片: https://example.com/photo.jpg
+      
+      - |
+        # 代码生成
+        @deepseek-claude-vision 根据这个设计图生成 React 代码: ui-design.png
+      
+      - |
+        # 综合分析
+        @deepseek-claude-vision 分析这个截图中的错误，并帮我调试

@@ -1,0 +1,83 @@
+{
+  "name": "deepseek_image_recognition",
+  "version": "0.1.0",
+  "description": "DeepSeek Vision 图片识别工具 - 支持识别图片内容、物体检测、文字识别等",
+  "author": "Tianci Liu",
+  "license": "MIT",
+  "categories": ["image-analysis", "vision", "ai"],
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "image_url": {
+        "type": "string",
+        "description": "图片的 URL 或本地文件路径",
+        "examples": ["https://example.com/image.jpg", "./local_image.png"]
+      },
+      "prompt": {
+        "type": "string",
+        "description": "识别提示词，指导模型如何识别图片",
+        "default": "请详细描述这张图片的内容",
+        "examples": [
+          "请识别这张图片中的所有物体",
+          "从图片中提取所有文字",
+          "分析图片的场景和背景",
+          "根据这个UI设计生成代码"
+        ]
+      }
+    },
+    "required": ["image_url"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": ["success", "error"],
+        "description": "识别状态"
+      },
+      "result": {
+        "type": "string",
+        "description": "识别结果文本"
+      },
+      "error": {
+        "type": "string",
+        "description": "错误信息（仅在失败时出现）"
+      }
+    }
+  },
+  "environment_variables": {
+    "DEEPSEEK_API_KEY": {
+      "type": "string",
+      "required": true,
+      "description": "DeepSeek API 密钥"
+    },
+    "DEEPSEEK_API_URL": {
+      "type": "string",
+      "default": "https://api.deepseek.com/v1",
+      "description": "DeepSeek API 地址"
+    }
+  },
+  "examples": [
+    {
+      "title": "识别本地图片",
+      "input": {
+        "image_url": "./photo.jpg",
+        "prompt": "请描述这张图片中的内容"
+      }
+    },
+    {
+      "title": "识别网络图片",
+      "input": {
+        "image_url": "https://example.com/screenshot.png",
+        "prompt": "从这个截图中识别所有的文字和UI元素"
+      }
+    },
+    {
+      "title": "代码生成",
+      "input": {
+        "image_url": "./ui-design.png",
+        "prompt": "根据这个UI设计图生成React代码"
+      }
+    }
+  ]
+}
